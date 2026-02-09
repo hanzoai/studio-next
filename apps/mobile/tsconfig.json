@@ -1,0 +1,15 @@
+{
+  "extends": "expo/tsconfig.base",
+  "compilerOptions": {
+    "strict": true,
+    "paths": {
+      "@studio/core": ["../../packages/core/src"],
+      "@studio/core/*": ["../../packages/core/src/*"],
+      "@studio/ui": ["../../packages/ui/src"],
+      "@studio/ui/*": ["../../packages/ui/src/*"],
+      "@studio/graph": ["../../packages/graph/src"],
+      "@studio/graph/*": ["../../packages/graph/src/*"]
+    }
+  },
+  "include": ["src/**/*", "*.ts", "*.tsx"]
+}

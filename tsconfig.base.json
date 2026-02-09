@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "composite": true,
+    "paths": {
+      "@studio/core": ["./packages/core/src"],
+      "@studio/core/*": ["./packages/core/src/*"],
+      "@studio/ui": ["./packages/ui/src"],
+      "@studio/ui/*": ["./packages/ui/src/*"],
+      "@studio/graph": ["./packages/graph/src"],
+      "@studio/graph/*": ["./packages/graph/src/*"]
+    }
+  },
+  "exclude": ["node_modules", "dist", "build"]
+}

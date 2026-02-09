@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "composite": false,
+    "paths": {
+      "@studio/core": ["../../packages/core/src"],
+      "@studio/core/*": ["../../packages/core/src/*"],
+      "@studio/ui": ["../../packages/ui/src"],
+      "@studio/ui/*": ["../../packages/ui/src/*"],
+      "@studio/graph": ["../../packages/graph/src"],
+      "@studio/graph/*": ["../../packages/graph/src/*"]
+    }
+  },
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../../packages/core" },
+    { "path": "../../packages/ui" },
+    { "path": "../../packages/graph" }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "name": "@studio/ui",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./theme": "./src/theme/index.ts",
+    "./components": "./src/components/index.ts",
+    "./icons": "./src/icons/index.ts"
+  },
+  "scripts": {
+    "build": "tsc -b tsconfig.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/"
+  },
+  "dependencies": {
+    "@tamagui/adapt": "1.141.5",
+    "@tamagui/animations-react-native": "1.141.5",
+    "@tamagui/core": "1.141.5",
+    "@tamagui/font-inter": "1.141.5",
+    "@tamagui/helpers-icon": "1.141.5",
+    "@tamagui/portal": "1.141.5",
+    "@tamagui/react-native-media-driver": "1.141.5",
+    "@tamagui/remove-scroll": "1.141.5",
+    "@tamagui/theme-base": "1.141.5",
+    "tamagui": "1.141.5",
+    "react": "^19.0.0"
+  },
+  "devDependencies": {
+    "typescript": "~5.7.3",
+    "react-native": "0.79.5"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-native": ">=0.70.0"
+  },
+  "peerDependenciesMeta": {
+    "react-native": {
+      "optional": true
+    }
+  }
+}

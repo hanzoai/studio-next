@@ -1,0 +1,18 @@
+export const zIndexes = {
+  negative: -1,
+  background: 0,
+  default: 1,
+  mask: 10,
+  dropdown: 970,
+  header: 980,
+  sidebar: 990,
+  sticky: 1020,
+  fixed: 1030,
+  modalBackdrop: 1040,
+  offcanvas: 1050,
+  modal: 1060,
+  popoverBackdrop: 1065,
+  popover: 1070,
+  tooltip: 1080,
+  overlay: 100010,
+}
