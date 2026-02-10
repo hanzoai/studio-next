@@ -11,22 +11,18 @@ export type {
   SelectionState,
 } from './engine/types'
 
-// React Skia renderer
-export { GraphCanvas, type GraphCanvasProps } from './GraphCanvas'
-
-// Renderer utilities
+// xyflow adapter
 export {
+  graphToFlow,
+  toFlowNode,
+  toFlowEdge,
+  applyNodePosition,
   getSlotColor,
   getCategoryColor,
-  SLOT_COLORS,
-  CATEGORY_COLORS,
-} from './renderer/constants'
+  type StudioNodeData,
+} from './adapter'
 
-// Gesture utilities
-export {
-  screenToGraph,
-  graphToScreen,
-  hitTestNode,
-  hitTestSlot,
-  useCamera,
-} from './gestures/useGraphGestures'
+// React components
+export { GraphCanvas, type GraphCanvasProps } from './GraphCanvas'
+export { StudioNode } from './nodes/StudioNode'
+export { StudioEdge } from './edges/StudioEdge'

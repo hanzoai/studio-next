@@ -10,12 +10,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@shopify/react-native-skia": "^2.2.4",
     "@studio/core": "workspace:*",
     "@studio/graph": "workspace:*",
     "@studio/ui": "workspace:*",
     "@tamagui/core": "1.141.5",
     "@tamagui/vite-plugin": "1.141.5",
+    "@xyflow/react": "^12.6.0",
     "i18next": "^23.16.8",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

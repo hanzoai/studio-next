@@ -18,7 +18,7 @@ export function SettingsScreen() {
         <Stack gap="$spacing4">
           <Body>Hanzo Studio Mobile</Body>
           <BodySmall color="$neutral3">Version 2.0.0-alpha</BodySmall>
-          <BodySmall color="$neutral3">React Native + Tamagui + Skia</BodySmall>
+          <BodySmall color="$neutral3">React Native + Tamagui</BodySmall>
         </Stack>
       </Card>
     </Stack>

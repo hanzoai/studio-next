@@ -47,6 +47,5 @@ export const configWithoutAnimations = {
     allowedStyleValues: false,
     autocompleteSpecificTokens: 'except-special' as const,
     fastSchemeChange: true,
-    defaultTheme: 'dark',
   },
 } satisfies CreateTamaguiProps

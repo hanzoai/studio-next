@@ -1,217 +1,131 @@
 /**
- * GraphCanvas - Main graph editor React component.
+ * GraphCanvas - Main graph editor component built on @xyflow/react.
  *
- * Uses @shopify/react-native-skia Canvas for hardware-accelerated rendering.
- * Works on both web and native (iOS/Android).
+ * Wraps ReactFlow with ComfyUI-style custom nodes and edges.
+ * Works on web. For mobile, wrap in a WebView or use a simplified view.
  */
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import {
-  Canvas,
-  useCanvasRef,
-  useTouchHandler,
-  Skia,
-  useFont,
-  type SkCanvas,
-} from '@shopify/react-native-skia'
+  ReactFlow,
+  Background,
+  Controls,
+  MiniMap,
+  useNodesState,
+  useEdgesState,
+  addEdge,
+  type OnConnect,
+  type NodeChange,
+  type Node,
+  BackgroundVariant,
+} from '@xyflow/react'
+import '@xyflow/react/dist/style.css'
+
 import { Graph } from './engine/graph'
-import type { Camera, GraphNode } from './engine/types'
-import { drawGrid } from './renderer/drawGrid'
-import { drawNode } from './renderer/drawNode'
-import { drawLink, drawTempLink } from './renderer/drawLink'
-import { screenToGraph, hitTestNode, hitTestSlot, useCamera } from './gestures/useGraphGestures'
+import { graphToFlow, applyNodePosition, type StudioNodeData } from './adapter'
+import { StudioNode } from './nodes/StudioNode'
+import { StudioEdge } from './edges/StudioEdge'
+
+type StudioFlowNode = Node<StudioNodeData>
+
+const nodeTypes = { studio: StudioNode } as const
+const edgeTypes = { studio: StudioEdge } as const
 
 export interface GraphCanvasProps {
   graph: Graph
-  width: number
-  height: number
   onNodeSelect?: (nodeId: number | null) => void
   onNodeMoved?: (nodeId: number, pos: [number, number]) => void
   onLinkCreated?: (originId: number, originSlot: number, targetId: number, targetSlot: number) => void
+  onLinkDeleted?: (linkId: number) => void
 }
 
 export function GraphCanvas({
   graph,
-  width,
-  height,
   onNodeSelect,
   onNodeMoved,
   onLinkCreated,
 }: GraphCanvasProps) {
-  const canvasRef = useCanvasRef()
-  const { camera, pan, zoom } = useCamera()
+  const initial = useMemo(() => graphToFlow(graph), [graph])
+  const [nodes, setNodes, onNodesChange] = useNodesState(initial.nodes)
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initial.edges)
 
-  const [selectedNodes, setSelectedNodes] = useState<Set<number>>(new Set())
-  const [dragging, setDragging] = useState<{ nodeId: number; offset: [number, number] } | null>(null)
-  const [connecting, setConnecting] = useState<{
-    nodeId: number
-    slotIndex: number
-    isOutput: boolean
-    mousePos: [number, number]
-  } | null>(null)
+  const handleNodesChange = useCallback(
+    (changes: NodeChange<StudioFlowNode>[]) => {
+      onNodesChange(changes)
 
-  // Track gesture state
-  const lastTouchRef = useRef<[number, number] | null>(null)
-  const pinchRef = useRef<{ dist: number; scale: number } | null>(null)
-
-  const font = useFont(null, 13)
-  const smallFont = useFont(null, 11)
-
-  const touchHandler = useTouchHandler({
-    onStart: (touchInfo) => {
-      const { x: sx, y: sy } = touchInfo
-      const [gx, gy] = screenToGraph(sx, sy, camera.current)
-
-      lastTouchRef.current = [sx, sy]
-
-      // Hit test nodes
-      const hitNode = hitTestNode(graph.nodes, gx, gy)
-      if (hitNode) {
-        // Check slot hit first
-        const slot = hitTestSlot(hitNode, gx, gy)
-        if (slot) {
-          setConnecting({
-            nodeId: hitNode.id,
-            slotIndex: slot.index,
-            isOutput: slot.isOutput,
-            mousePos: [gx, gy],
-          })
-          return
+      // Sync position changes back to engine
+      for (const change of changes) {
+        if (change.type === 'position' && change.position && !change.dragging) {
+          applyNodePosition(graph, change.id, change.position)
+          onNodeMoved?.(Number(change.id), [change.position.x, change.position.y])
         }
+      }
+    },
+    [graph, onNodesChange, onNodeMoved]
+  )
 
-        // Node drag
-        setDragging({
-          nodeId: hitNode.id,
-          offset: [gx - hitNode.pos[0], gy - hitNode.pos[1]],
-        })
-        setSelectedNodes(new Set([hitNode.id]))
-        onNodeSelect?.(hitNode.id)
-      } else {
-        setSelectedNodes(new Set())
+  const handleConnect: OnConnect = useCallback(
+    (params) => {
+      setEdges((eds) => addEdge({ ...params, type: 'studio' }, eds))
+
+      // Parse handle IDs to get slot indices
+      const originSlot = Number(params.sourceHandle?.replace('output-', '') ?? 0)
+      const targetSlot = Number(params.targetHandle?.replace('input-', '') ?? 0)
+
+      // Add to engine
+      const originNode = graph.getNode(Number(params.source))
+      const targetNode = graph.getNode(Number(params.target))
+      if (originNode && targetNode) {
+        const type = originNode.outputs[originSlot]?.type ?? '*'
+        graph.addLink(Number(params.source), originSlot, Number(params.target), targetSlot, type)
+        onLinkCreated?.(Number(params.source), originSlot, Number(params.target), targetSlot)
+      }
+    },
+    [graph, setEdges, onLinkCreated]
+  )
+
+  const handleSelectionChange = useCallback(
+    ({ nodes: selectedNodes }: { nodes: typeof nodes }) => {
+      if (selectedNodes.length === 1) {
+        onNodeSelect?.(Number(selectedNodes[0].id))
+      } else if (selectedNodes.length === 0) {
         onNodeSelect?.(null)
       }
     },
-
-    onActive: (touchInfo) => {
-      const { x: sx, y: sy } = touchInfo
-      const [gx, gy] = screenToGraph(sx, sy, camera.current)
-
-      if (dragging) {
-        const node = graph.getNode(dragging.nodeId)
-        if (node) {
-          node.pos = [gx - dragging.offset[0], gy - dragging.offset[1]]
-        }
-      } else if (connecting) {
-        setConnecting((prev) => prev ? { ...prev, mousePos: [gx, gy] } : null)
-      } else if (lastTouchRef.current) {
-        // Pan
-        pan(sx - lastTouchRef.current[0], sy - lastTouchRef.current[1])
-        lastTouchRef.current = [sx, sy]
-      }
-    },
-
-    onEnd: (touchInfo) => {
-      if (dragging) {
-        const node = graph.getNode(dragging.nodeId)
-        if (node) onNodeMoved?.(dragging.nodeId, node.pos)
-        setDragging(null)
-      }
-
-      if (connecting) {
-        const { x: sx, y: sy } = touchInfo
-        const [gx, gy] = screenToGraph(sx, sy, camera.current)
-        const hitNode = hitTestNode(graph.nodes, gx, gy)
-
-        if (hitNode && hitNode.id !== connecting.nodeId) {
-          const slot = hitTestSlot(hitNode, gx, gy)
-          if (slot && slot.isOutput !== connecting.isOutput) {
-            if (connecting.isOutput) {
-              onLinkCreated?.(connecting.nodeId, connecting.slotIndex, hitNode.id, slot.index)
-            } else {
-              onLinkCreated?.(hitNode.id, slot.index, connecting.nodeId, connecting.slotIndex)
-            }
-          }
-        }
-        setConnecting(null)
-      }
-
-      lastTouchRef.current = null
-    },
-  })
-
-  const onDraw = useCallback(
-    (canvas: SkCanvas) => {
-      if (!font || !smallFont) return
-
-      const cam = camera.current
-
-      // Clear
-      canvas.clear(Skia.Color('#171717'))
-
-      // Grid (in screen space)
-      const gridPaint = Skia.Paint()
-      drawGrid(canvas, gridPaint, cam, width, height)
-
-      // Apply camera transform
-      canvas.save()
-      canvas.translate(cam.x, cam.y)
-      canvas.scale(cam.scale, cam.scale)
-
-      // Links
-      const linkPaint = Skia.Paint()
-      for (const link of graph.links.values()) {
-        const origin = graph.getNode(link.originId)
-        const target = graph.getNode(link.targetId)
-        if (origin && target) {
-          drawLink(canvas, linkPaint, link, origin, target)
-        }
-      }
-
-      // Temp connecting link
-      if (connecting) {
-        const connectNode = graph.getNode(connecting.nodeId)
-        if (connectNode) {
-          const type = connecting.isOutput
-            ? connectNode.outputs[connecting.slotIndex]?.type ?? '*'
-            : connectNode.inputs[connecting.slotIndex]?.type ?? '*'
-          drawTempLink(
-            canvas, linkPaint, connectNode,
-            connecting.slotIndex, connecting.isOutput,
-            connecting.mousePos[0], connecting.mousePos[1], type
-          )
-        }
-      }
-
-      // Nodes
-      const nodePaint = Skia.Paint()
-      const titlePaint = Skia.Paint()
-      const textPaint = Skia.Paint()
-      const slotPaint = Skia.Paint()
-
-      for (const node of graph.nodes.values()) {
-        drawNode({
-          canvas,
-          nodePaint,
-          titlePaint,
-          textPaint,
-          slotPaint,
-          font,
-          smallFont,
-          selectedNodes,
-        }, node)
-      }
-
-      canvas.restore()
-    },
-    [graph, font, smallFont, width, height, selectedNodes, connecting, camera]
+    [onNodeSelect]
   )
 
   return (
-    <Canvas
-      ref={canvasRef}
-      style={{ width, height }}
-      onTouch={touchHandler}
-      onDraw={onDraw}
-    />
+    <div style={{ width: '100%', height: '100%' }}>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={handleNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={handleConnect}
+        onSelectionChange={handleSelectionChange}
+        nodeTypes={nodeTypes as any}
+        edgeTypes={edgeTypes as any}
+        colorMode="dark"
+        fitView
+        snapToGrid
+        snapGrid={[20, 20]}
+        defaultEdgeOptions={{ type: 'studio' }}
+        proOptions={{ hideAttribution: true }}
+        minZoom={0.1}
+        maxZoom={4}
+      >
+        <Background variant={BackgroundVariant.Dots} gap={20} size={1} color="rgba(255,255,255,0.05)" />
+        <Controls
+          showInteractive={false}
+          style={{ backgroundColor: '#1f1f1f', borderColor: '#2a2a2a' }}
+        />
+        <MiniMap
+          style={{ backgroundColor: '#1f1f1f', border: '1px solid #2a2a2a' }}
+          nodeColor={(n) => (n.data?.bgColor as string) ?? '#3a3a3a'}
+          maskColor="rgba(0,0,0,0.6)"
+        />
+      </ReactFlow>
+    </div>
   )
 }
 
