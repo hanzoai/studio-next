@@ -1,13 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { TamaguiProvider } from 'tamagui'
-import { config } from './tamagui.config'
+import { GuiProvider } from '@hanzo/gui'
+import { config } from './gui.config'
 import { App } from './App'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <TamaguiProvider config={config} defaultTheme="dark">
+    <GuiProvider config={config} defaultTheme="dark">
       <App />
-    </TamaguiProvider>
+    </GuiProvider>
   </React.StrictMode>
 )

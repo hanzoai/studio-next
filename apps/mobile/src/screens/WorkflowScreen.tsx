@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { ScrollView } from 'react-native'
-import { Stack } from 'tamagui'
+import { Stack } from '@hanzo/gui'
 import { Graph } from '@studio/graph/engine'
 import { Body, BodySmall, Card } from '@studio/ui'
 import type { GraphNode } from '@studio/graph/engine'

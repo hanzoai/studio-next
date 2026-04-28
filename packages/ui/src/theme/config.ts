@@ -1,4 +1,4 @@
-import type { CreateTamaguiProps } from '@tamagui/core'
+import type { CreateGuiProps } from '@hanzogui/core'
 import { allFonts } from './fonts'
 import { media } from './media'
 import { themes } from './themes'
@@ -48,4 +48,4 @@ export const configWithoutAnimations = {
     autocompleteSpecificTokens: 'except-special' as const,
     fastSchemeChange: true,
   },
-} satisfies CreateTamaguiProps
+} satisfies CreateGuiProps

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Stack } from 'tamagui'
+import { Stack } from '@hanzo/gui'
 import { Card, Input, Heading3, Body, BodySmall, Button } from '@studio/ui'
 
 export function SettingsScreen() {
@@ -18,7 +18,7 @@ export function SettingsScreen() {
         <Stack gap="$spacing4">
           <Body>Hanzo Studio Mobile</Body>
           <BodySmall color="$neutral3">Version 2.0.0-alpha</BodySmall>
-          <BodySmall color="$neutral3">React Native + Tamagui</BodySmall>
+          <BodySmall color="$neutral3">React Native + @hanzo/gui</BodySmall>
         </Stack>
       </Card>
     </Stack>

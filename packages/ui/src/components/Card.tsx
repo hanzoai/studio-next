@@ -1,5 +1,5 @@
-import { styled, Stack, Text } from 'tamagui'
-import type { StackProps } from 'tamagui'
+import { styled, Stack, Text } from '@hanzo/gui'
+import type { StackProps } from '@hanzo/gui'
 
 const CardFrame = styled(Stack, {
   name: 'Card',

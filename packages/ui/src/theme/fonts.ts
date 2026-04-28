@@ -1,4 +1,4 @@
-import { createFont } from '@tamagui/core'
+import { createFont } from '@hanzogui/core'
 
 const interFont = createFont({
   family: 'Inter, system-ui, -apple-system, sans-serif',
