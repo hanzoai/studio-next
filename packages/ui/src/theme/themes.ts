@@ -1,13 +1,13 @@
 import { colorsDark, colorsLight } from './colors'
 
-const { none: darkTransparent, ...tamaguiColorsDark } = colorsDark
-const { none: lightTransparent, ...tamaguiColorsLight } = colorsLight
+const { none: darkTransparent, ...guiColorsDark } = colorsDark
+const { none: lightTransparent, ...guiColorsLight } = colorsLight
 
 const dark = {
-  ...tamaguiColorsDark,
+  ...guiColorsDark,
   transparent: darkTransparent,
 
-  // Tamagui theme tokens
+  // @hanzo/gui theme tokens
   background: colorsDark.surface1,
   backgroundHover: colorsDark.surface2,
   backgroundPress: colorsDark.surface2,
@@ -27,7 +27,7 @@ const dark = {
 type BaseTheme = typeof dark
 
 const light: BaseTheme = {
-  ...tamaguiColorsLight,
+  ...guiColorsLight,
   transparent: lightTransparent,
 
   background: colorsLight.surface1,

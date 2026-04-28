@@ -1,4 +1,4 @@
-import { createTokens } from '@tamagui/core'
+import { createTokens } from '@hanzogui/core'
 import { borderRadii } from './borderRadii'
 import { colors } from './colors'
 import { allFonts } from './fonts'

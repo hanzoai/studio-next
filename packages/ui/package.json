@@ -17,16 +17,16 @@
     "lint": "eslint src/"
   },
   "dependencies": {
-    "@tamagui/adapt": "1.141.5",
-    "@tamagui/animations-react-native": "1.141.5",
-    "@tamagui/core": "1.141.5",
-    "@tamagui/font-inter": "1.141.5",
-    "@tamagui/helpers-icon": "1.141.5",
-    "@tamagui/portal": "1.141.5",
-    "@tamagui/react-native-media-driver": "1.141.5",
-    "@tamagui/remove-scroll": "1.141.5",
-    "@tamagui/theme-base": "1.141.5",
-    "tamagui": "1.141.5",
+    "@hanzogui/adapt": "1.141.5",
+    "@hanzogui/animations-react-native": "1.141.5",
+    "@hanzogui/core": "1.141.5",
+    "@hanzogui/font-inter": "1.141.5",
+    "@hanzogui/helpers-icon": "1.141.5",
+    "@hanzogui/portal": "1.141.5",
+    "@hanzogui/react-native-media-driver": "1.141.5",
+    "@hanzogui/remove-scroll": "1.141.5",
+    "@hanzogui/theme-base": "1.141.5",
+    "@hanzo/gui": "7.1.0",
     "react": "^19.0.0"
   },
   "devDependencies": {
