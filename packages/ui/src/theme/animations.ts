@@ -1,4 +1,4 @@
-import { createAnimations } from '@tamagui/animations-react-native'
+import { createAnimations } from '@hanzogui/animations-react-native'
 
 export const animations = createAnimations({
   fast: {

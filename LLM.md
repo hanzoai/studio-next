@@ -1,7 +1,7 @@
 # LLM.md - Hanzo Studio Next
 
 ## Overview
-Hanzo Studio - Universal AI workflow editor (React + Tamagui)
+Hanzo Studio - Universal AI workflow editor (React + @hanzo/gui)
 
 ## Tech Stack
 - **Language**: TypeScript/JavaScript

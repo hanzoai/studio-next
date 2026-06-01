@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback, useState } from 'react'
-import { Stack } from 'tamagui'
+import { Stack } from '@hanzo/gui'
 import { Button, Card, Heading2, Body, BodySmall, Input } from '@studio/ui'
 import { Graph, GraphCanvas } from '@studio/graph'
 
