@@ -1,5 +1,5 @@
-import { styled, Stack, Text, Input as TamaguiInput } from 'tamagui'
-import type { InputProps as TamaguiInputProps } from 'tamagui'
+import { styled, Stack, Text, Input as GuiInput } from '@hanzo/gui'
+import type { InputProps as GuiInputProps } from '@hanzo/gui'
 
 const InputFrame = styled(Stack, {
   name: 'InputFrame',
@@ -15,7 +15,7 @@ const InputLabel = styled(Text, {
   fontWeight: '500',
 })
 
-const StyledInput = styled(TamaguiInput, {
+const StyledInput = styled(GuiInput, {
   name: 'StudioInput',
   backgroundColor: '$surface2',
   borderColor: '$surface3',
@@ -42,7 +42,7 @@ const ErrorText = styled(Text, {
   color: '$statusCritical',
 })
 
-export interface InputProps extends TamaguiInputProps {
+export interface InputProps extends GuiInputProps {
   label?: string
   error?: string
 }

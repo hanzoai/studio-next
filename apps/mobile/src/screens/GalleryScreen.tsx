@@ -1,5 +1,5 @@
 import React from 'react'
-import { Stack } from 'tamagui'
+import { Stack } from '@hanzo/gui'
 import { Heading3, BodySmall } from '@studio/ui'
 
 export function GalleryScreen() {

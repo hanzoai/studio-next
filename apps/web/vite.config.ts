@@ -1,14 +1,14 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { tamaguiPlugin } from '@tamagui/vite-plugin'
+import { guiPlugin } from '@hanzogui/vite-plugin'
 import path from 'path'
 
 export default defineConfig({
   plugins: [
     react(),
-    tamaguiPlugin({
-      config: './src/tamagui.config.ts',
-      components: ['tamagui'],
+    guiPlugin({
+      config: './src/gui.config.ts',
+      components: ['@hanzo/gui'],
     }),
   ],
   resolve: {
@@ -22,7 +22,7 @@ export default defineConfig({
     extensions: ['.web.tsx', '.web.ts', '.web.js', '.tsx', '.ts', '.js'],
   },
   optimizeDeps: {
-    include: ['tamagui', '@tamagui/core'],
+    include: ['@hanzo/gui', '@hanzogui/core'],
   },
   server: {
     port: 5180,

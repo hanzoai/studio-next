@@ -2,7 +2,7 @@
   "name": "@hanzo/studio",
   "version": "2.0.0",
   "private": true,
-  "description": "Hanzo Studio - Universal AI workflow editor (React + Tamagui)",
+  "description": "Hanzo Studio - Universal AI workflow editor (React + @hanzo/gui)",
   "license": "GPL-3.0-only",
   "homepage": "https://studio.hanzo.ai",
   "repository": "https://github.com/hanzoai/studio",

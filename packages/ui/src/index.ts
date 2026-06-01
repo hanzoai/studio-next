@@ -1,3 +1,3 @@
 export * from './components'
 export * from './theme'
-export { config } from './tamagui.config'
+export { config } from './gui.config'

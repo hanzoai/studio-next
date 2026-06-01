@@ -1,5 +1,5 @@
 import React from 'react'
-import { Stack } from 'tamagui'
+import { Stack } from '@hanzo/gui'
 import { Button, Card, Heading2, Body, BodySmall } from '@studio/ui'
 
 export function HomeScreen() {
